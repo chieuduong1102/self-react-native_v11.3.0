@@ -5,18 +5,25 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { BannerTop } from '@/components/BannerTop';
+import { MenuFunction } from '@/components/MenuFunction';
 import { FullWindowOverlay } from 'react-native-screens';
+import React from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
+  const insets = useSafeAreaInsets(); 
+
   return (
     <ParallaxScrollView>
-      <BannerTop style={{ padding: 0, margin: 0, width: '100%' }} />
+      <BannerTop style={{ padding: 0, margin: 0, marginTop: insets.top, marginBottom: insets.bottom, width: '100%' }} />
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">
-          <ThemedText style={{ color: 'red' }}>Make your life!</ThemedText> Libary Covers
+          <ThemedText style={{ color: 'red', fontFamily: 'DancingScript' }}>Make your life!</ThemedText> Libary Covers
         </ThemedText>
         <Image source={{ uri: 'https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg' }} style={styles.logoHome} />
       </ThemedView>
+      <MenuFunction />
+
     </ParallaxScrollView>
   );
 }
