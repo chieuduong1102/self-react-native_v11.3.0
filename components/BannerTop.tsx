@@ -16,13 +16,13 @@ export const BannerTop: React.FC<BannerTopProps> = ({ style }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const handleNext = () => {
-        const nextIndex = (currentIndex + 1) % images.length; // Lặp lại từ đầu
+        const nextIndex = (currentIndex + 1) % images.length;
         setCurrentIndex(nextIndex);
         scrollViewRef.current?.scrollTo({ x: nextIndex * width, animated: true });
     };
 
     const handlePrev = () => {
-        const prevIndex = (currentIndex - 1 + images.length) % images.length; // Lặp lại từ cuối
+        const prevIndex = (currentIndex - 1 + images.length) % images.length;
         setCurrentIndex(prevIndex);
         scrollViewRef.current?.scrollTo({ x: prevIndex * width, animated: true });
     };

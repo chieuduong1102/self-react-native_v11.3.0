@@ -9,7 +9,7 @@ export const MenuFunction = () => {
         { icon: 'home', text: 'Home', path: '/index' },
         { icon: 'user', text: 'MyProfile', path: '/profile' },
         { icon: 'image', text: 'Gallery', path: '../screens/gallery' },
-        { icon: 'star', text: 'Top', path: '/top' },
+        { icon: 'star', text: 'Top', path: '../screens/top' },
         { icon: 'bell', text: 'Notifications', path: '/notifications' },
     ];
 
