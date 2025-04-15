@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Button, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ResponseAPIDisplay } from '../../components/ResponseAPIDisplay'; // Adjust the path to the correct location
+import { useRouter } from 'expo-router';
 export const TopScreen = () => {
     const navigation = useNavigation();
+    const router = useRouter(); 
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
@@ -13,6 +15,20 @@ export const TopScreen = () => {
     }, [navigation]);
 
     const [responseData, setResponseData] = useState(null);
+
+    const fetchAPIScreenLoaded = async () => {
+        try {
+            const response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
+            const data = await response.json();
+            setResponseData(data);
+        } catch (error) {
+            console.error('GET request error:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchAPIScreenLoaded();
+    }, []);
 
     const handleGetRequest = async () => {
         try {
@@ -44,10 +60,33 @@ export const TopScreen = () => {
         }
     };
 
+    const gotoOrtherScreenAPI = async () => {
+        try {
+            const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    title: 'foo',
+                    body: 'bar',
+                    userId: 1,
+                }),
+            });
+            const data = await response.json();
+            if(data) {
+                router.push('./gallery'); 
+            }
+        } catch (error) {
+            console.error('POST request error:', error);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <Button title="Call GET API" onPress={handleGetRequest} />
             <Button title="Call POST API" onPress={handlePostRequest} />
+            <Button title="CallAPI to GotoOrtherScreen" onPress={gotoOrtherScreenAPI} />
             {responseData && <ResponseAPIDisplay data={responseData} />}
         </View>
     );
