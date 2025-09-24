@@ -28,6 +28,7 @@ export const GalleryScreen = () => {
             quantities={quantities}
             setQuantities={setQuantities}
             setNumberSelected={setNumberSelected}
+            numberSelected={numberSelected}
         />
     );
 

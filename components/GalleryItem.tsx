@@ -5,33 +5,41 @@ export const GalleryItem = ({
     item, 
     quantities, 
     setQuantities, 
-    setNumberSelected 
+    setNumberSelected,
+    numberSelected
 }: { 
     item: { id: string; uri: string }; 
     quantities: { [key: string]: number }; 
     setQuantities: React.Dispatch<React.SetStateAction<{ [key: string]: number }>>; 
     setNumberSelected: React.Dispatch<React.SetStateAction<number>>; 
+    numberSelected: number;
 }) => {
     const handleIncrease = () => {
-        setQuantities((prev) => {
-            const updated = {
-                ...prev,
-                [item.id]: (prev[item.id] || 0) + 1,
-            };
-            updateNumberSelected(updated);
-            return updated;
-        });
+        if (numberSelected < 5) {
+            setQuantities((prev) => {
+                const updated = {
+                    ...prev,
+                    [item.id]: (prev[item.id] || 0) + 1,
+                };
+                updateNumberSelected(updated);
+                console.log('Updated quantities Item:', item.id, updated[item.id]);
+                return updated;
+            });
+        }
     };
 
     const handleDecrease = () => {
-        setQuantities((prev) => {
-            const updated = {
-                ...prev,
-                [item.id]: Math.max((prev[item.id] || 0) - 1, 0), // Không cho phép số lượng nhỏ hơn 0
-            };
-            updateNumberSelected(updated);
-            return updated;
-        });
+        if (quantities[item.id] > 0) {
+            setQuantities((prev) => {
+                const updated = {
+                    ...prev,
+                    [item.id]: Math.max((prev[item.id] || 0) - 1, 0), // Không cho phép số lượng nhỏ hơn 0
+                };
+                updateNumberSelected(updated);
+                console.log('Updated quantities Item:', item.id, updated[item.id]);
+                return updated;
+            });
+        }
     };
 
     const updateNumberSelected = (updatedQuantities: { [key: string]: number }) => {
@@ -43,11 +51,19 @@ export const GalleryItem = ({
         <View style={[styles.imageContainer, styles.imageWrapper]}>
             <Image source={{ uri: item.uri }} style={styles.image} />
             <View style={styles.counterContainer}>
-                <TouchableOpacity onPress={handleDecrease} style={styles.button}>
+                <TouchableOpacity 
+                    onPress={handleDecrease} 
+                    style={[styles.button, (quantities[item.id] === 0 || !quantities[item.id]) && styles.disabledButton]} 
+                    disabled={quantities[item.id] === 0} // Disable nếu số lượng của mục = 0
+                >
+
                     <Text style={styles.buttonText}>-</Text>
                 </TouchableOpacity>
                 <Text style={styles.quantity}>{quantities[item.id] || 0}</Text>
-                <TouchableOpacity onPress={handleIncrease} style={styles.button}>
+                <TouchableOpacity onPress={handleIncrease} 
+                style={[styles.button, numberSelected === 5 && styles.disabledButton]} 
+                disabled={numberSelected === 5}
+                >
                     <Text style={styles.buttonText}>+</Text>
                 </TouchableOpacity>
             </View>
@@ -85,6 +101,9 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         paddingHorizontal: 10,
         paddingVertical: 5,
+    },
+    disabledButton: {
+        opacity: 0.5, // Làm mờ nút khi bị disable
     },
     buttonText: {
         fontSize: 16,
